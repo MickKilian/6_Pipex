@@ -1,0 +1,76 @@
+VIDEOS from CodeVault on YoutUbe
+
+fork() use #include <unistd.h>
+ -> the memory is copied exactly, variable by variable, and they become then independant
+ wait() : stop the execution until a child process (which ever the first one is to finish is) finishes <wait.h>, returns -1 if no child process exists or
+ returns the proccess id that you will actually wait for the end.
+ sleep()  : specifies the time in sec to wait in the currrent process.
+ if the parent of the child process has finished before the cchild, then a new processs id is created for the parent of this child, it is like a zombie process that you cannot kill.
+ getpid() : gets the id of the current process
+ getppid() : gets the id of the parent process
+
+multiple forks
+to make sure that the -1 return of wait is beccause there is no child process, combine the errno != ECHILD condition when you test for that -1
+
+pipe (to communicate between processes)
+if (pipe(fd) == -1) to launch the pipe, fork comes after
+it is like files in memory that has a buffer that you can write and read from
+pipe takes an array as argument where it will save the 2 file descriptors that define the pipe
+fd[0] -> read
+fd[1] -> write
+usually you close the fd[0] or fd[1] depending on which side of the pipe you are in depending on what you do
+
+FIFO file, also a way for 2 processes to communicate
+necessary header files;
+<sys/stat.h>
+<sys/typtes.h>
+<errno.h{
+<fcntl.h>
+needs to be opened on both end for process which opened it for writing can continue, or same for process whhich
+opened it for reading
+mkfifo("name", 0777) or direcctly from terminal mkfifo name to create the FIFO file
+
+How to use FIFO
+see example on video
+we can send batches of data (array for instance) and send information back write in FIFO and read from FIFO
+
+Two-way pipes between two proccesses (parent and chld)
+if there is a risk to write and read the same information, use 2 pipes (a pipe should always be unidirectiona)
+
+Exec family of functions with header <unistd.h>
+_execl : with arguements:
+1st: path to the program
+2nd: path to the program
+3rd: argumenet for the program google.com (ex for ping)
+...
+Last: NULL pointer
+The functions of this family rtkethe new  process and putting on top of what we had before, the actual execution oorder, it overwrites it, unles there is an issue and the exec function does not actually lauch the program properly.
+_execlp : tp actually use the path that is provided in the arguements
+'l' : list of arguments
+'v' : vector, you pass arguments in an array
+'e' : environment, set of  variables that can be passed through another string array with the third variable char *envp[] in the main.
+
+If the function fails and we want to know why -> use ERRNO (with header <errno.h>)
+
+Executing commands
+example of Ping program
+exec commands override the whole, the memory is replaced, the execution lines, everything
+the way not to lose the current process is to create a new process with fork
+we have to chose the child process to execute the exec commands, otheerwise the parent process is replaced
+
+Exit status
+int wstatus;
+wait(&wstatus)
+if (WIFEXITED(wstatus)) {
+int statusCode = WEXITSTATUS(wstatus);
+if (statusCodee == 0) {
+	printf("Sucess!\n";)
+} else {
+	printf("Failure with status code %d\n", statusCode)
+	
+Redirections (dup and dup2)
+for instance we can create a file with open
+int file2 = dup(file)
+int file2 = dup2(file, 1) more interesting because instead of creating another file desciptor, it will close the the existing file descriptors and make it what the file descriptor used to be (interesting to redirect the STDOOUT for instance)
+we can use STDOUT_FILENO for the STDOUT (which is certainly 1)
+

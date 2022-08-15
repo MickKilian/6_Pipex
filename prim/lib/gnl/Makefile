@@ -6,13 +6,13 @@
 #    By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/12/02 22:04:39 by mbourgeo          #+#    #+#              #
-#    Updated: 2022/08/15 15:53:17 by mbourgeo         ###   ########.fr        #
+#    Updated: 2022/08/15 21:42:46 by mbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT_GOAL	= all
 
-SRCS	=	get_next_line_bonus.c get_next_line_utils_bonus.c
+SRCS	=	get_next_line.c get_next_line_utils.c
 SRCDIR	=	src
 LB_PATH	=	$(addprefix $(SRCDIR)/, $(SRCS))
 OBJDIR	=	obj

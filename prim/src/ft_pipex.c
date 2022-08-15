@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 05:25:42 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/15 17:54:25 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/15 22:51:38 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ int	ft_makechildrenproc(t_data *ppx, char **argv, char **envp)
 			else
 			{
 				//dprintf(2, "I am here1\n");
-				//dprintf(2, "%s dup2(%d,%d)\n", argv[i + 2], ppx->fd[i - 1][0], STDIN_FILENO);
+				//dprintf(2, "%s dup2(%d,%d)\n", argv[i + 2]
+				//, ppx->fd[i - 1][0], STDIN_FILENO);
 				dup2(ppx->fd[i - 1][0], STDIN_FILENO);
 				//dprintf(2, "I am here1ex\n");
 			}
@@ -78,20 +79,17 @@ int	ft_makechildrenproc(t_data *ppx, char **argv, char **envp)
 			{
 				//dprintf(2, "I am here2\n");
 				//dprintf(2, "i = %d\n", i);
-				//dprintf(2, "%s dup2(%d,%d)\n", argv[i + 2], ppx->fd[i][1], STDOUT_FILENO);
+				//dprintf(2, "%s dup2(%d,%d)\n", argv[i + 2]
+				//, ppx->fd[i][1], STDOUT_FILENO);
 				dup2(ppx->fd[i][1], STDOUT_FILENO);
 				//dprintf(2, "I am here2ex\n");
 			}
 			//dprintf(2, "cmd : %s\n", argv[i + 2]);
 			//dprintf(2, "I am here_cmd\n");
-			ft_leaveopen(ppx, i - 1, 0);
-			ft_leaveopen(ppx, i, 1);
+			ft_leaveopenfdchild(ppx, i);
 			if (ft_execve(ppx, argv[i + 2 + ppx->heredoc_offset], envp))
 				return (ft_printerr(ERR_EXEC));
-			close (ppx->fd[i - 1][0]);
-			close (ppx->fd[i][1]);
-			close (ppx->fd_infile);
-			close (ppx->fd_outfile);
+			ft_closefdchild(ppx, i);
 			return (0);
 		}
 	}

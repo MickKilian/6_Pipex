@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/20 16:35:52 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/15 18:03:53 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/15 21:57:10 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char	*ft_findcmdpath(char *cmd, char *path_str)
 	return (NULL);
 }
 
-int ft_execve(t_data *ppx, char *cmd_str, char **envp)
+int	ft_execve(t_data *ppx, char *cmd_str, char **envp)
 {
 	char	**cmd_spt;
 

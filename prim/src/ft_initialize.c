@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/14 18:35:18 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/15 18:03:27 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/15 21:57:25 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	ft_initialize(t_data *ppx, int argc, char **argv, char **envp)
 			return (ft_printerr(ERR_MPIPE));
 	}
 	ppx->fd[i] = NULL;
-	if (ft_openinfile(ppx, argv[1 + ppx->heredoc_offset]) || ft_openoutfile(ppx, argv[argc - 1]))
+	if (ft_openinfile(ppx, argv[1 + ppx->heredoc_offset])
+		|| ft_openoutfile(ppx, argv[argc - 1]))
 		return (1);
 	//dprintf(2, "infile : %d\n", ppx->fd_infile);
 	//dprintf(2, "outfile : %d\n", ppx->fd_outfile);

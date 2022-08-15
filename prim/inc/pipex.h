@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 05:28:25 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/15 16:12:55 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/15 22:51:21 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <string.h>
 # include <sys/wait.h>
 # include "libft.h"
-# include "get_next_line_bonus.h"
+# include "get_next_line.h"
 
 # define ERR_ARGS "Error : Too few arguments"
 # define ERR_FILEHEREDOC "Error with heredoc"
@@ -47,7 +47,7 @@ typedef struct s_data
 	char	*cmd_path;
 	int		nb_pipes;
 	int		nb_proc;
-} t_data;
+}	t_data;
 
 enum
 {
@@ -55,7 +55,7 @@ enum
 };
 
 // main.c
-int	main(int argc, char **argv, char **envp);
+int		main(int argc, char **argv, char **envp);
 
 // ft_pipex.c
 int		ft_pipex(t_data *ppx, char **argv, char **envp);
@@ -70,8 +70,9 @@ int		ft_openoutfile(t_data *ppx, char *file);
 
 // ft_freeclose.c
 void	ft_freefd(int **fd);
-void	ft_leaveopen(t_data *ppx, int fdi, int fdj);
+void	ft_leaveopenfdchild(t_data *ppx, int fdi);
 void	ft_closeallfd(t_data *ppx);
+void	ft_closefdchild(t_data *ppx, int i);
 void	ft_freeclose(t_data *ppx);
 
 // ft_managerr.c
@@ -84,5 +85,6 @@ int		ft_execve(t_data *ppx, char *cmd_str, char **envp);
 
 // ft_heredoc.c
 int		ft_heredoc(t_data *ppx, char *argv);
+char	*ft_heredochd(t_data *ppx);
 
 #endif

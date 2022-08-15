@@ -6,47 +6,69 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/20 16:35:52 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/07/20 17:52:10 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/15 18:03:53 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/pipex.h"
+#include "pipex.h"
 
-int	ft_execve(void)
+char	*ft_findpathstr(char **envp)
 {
-	char	*arr[5];
-	char	*env[2];
-
-	const char *infile = "toto";
-
-	int fd = open(infile, O_RDWR);
-
-	if (fd < 0)
-		perror(infile);
-
-
-	arr[0] = "ping";
-	arr[1] = "-c";
-	arr[2] = "3";
-	arr[3] = "google.com";
-	arr[4] = NULL;
-
-	env[0] = "TEST=environment variable";
-	env[1] = NULL;
-	//if (execve("/usr/bin/ls", arr, env))
-	//	ft_printf("error\n");
-	execve("/usr/bin/ping", arr, env);
-	ft_printf("Finished executing\n");
-	return (0);
+	while (*envp)
+	{
+		if (!ft_strncmp("PATH", *envp, 4))
+			return (*envp + 5);
+		envp++;
+	}
+	return (NULL);
 }
 
+char	*ft_findcmdpath(char *cmd, char *path_str)
+{
+	char	**path_spt;
+	char	*cmd_str;
+	char	*temp;
 
+	//dprintf(2, "lets see path \n");
+	path_spt = ft_split(path_str, ':');
+	if (!path_spt)
+		return (NULL);
+	//ft_printf("here\n");
+	while (*path_spt)
+	{
+		temp = ft_strjoin(*path_spt, "/");
+		cmd_str = ft_strjoin(temp, cmd);
+		free(temp);
+		if (!access(cmd_str, 0))
+		{
+			//dprintf(2, "found : %s\n", cmd_str);
+			//free(path_spt);
+			return (cmd_str);
+		}
+		path_spt++;
+	}
+	return (NULL);
+}
 
-/*
-arr[0] = "pipex";
-arr[1] = "infile";
-arr[2] = "ls -la";
-arr[3] = "wc -c";
-arr[4] = "outfile";
-*/
+int ft_execve(t_data *ppx, char *cmd_str, char **envp)
+{
+	char	**cmd_spt;
 
+	//dprintf(2, "Voici la commande: %s\n", cmd_str);
+	cmd_spt = ft_split(cmd_str, ' ');
+	//dprintf(2, "Voici la commande: %s\n", cmd_spt[0]);
+	if (!cmd_spt)
+		return (ft_printerr(ERR_CMDSPLIT));
+	else
+	{
+		ppx->cmd_path = ft_findcmdpath(cmd_spt[0], ppx->path_env);
+		if (!ppx->cmd_path)
+		{
+			//dprintf(2, "chtite ereur \n");
+			free(cmd_spt);
+			return (ft_printerr(ERR_CMDPATH));
+		}
+		execve(ppx->cmd_path, cmd_spt, envp);
+	}
+	return (0);
+}

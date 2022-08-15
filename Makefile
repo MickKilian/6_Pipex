@@ -6,28 +6,14 @@
 #    By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 18:34:29 by mbourgeo          #+#    #+#              #
-#    Updated: 2022/07/20 19:42:55 by mbourgeo         ###   ########.fr        #
+#    Updated: 2022/08/15 18:10:58 by mbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT_GOAL	= all
 
-LIBFT_SRCS	=	ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c ft_isprint.c \
-				ft_strlen.c ft_memset.c ft_bzero.c ft_memcpy.c ft_memmove.c \
-				ft_strlcpy.c ft_strlcat.c ft_toupper.c ft_tolower.c ft_strchr.c \
-				ft_strrchr.c ft_strncmp.c ft_memchr.c ft_memcmp.c ft_strnstr.c \
-				ft_atoi.c ft_calloc.c ft_strdup.c ft_substr.c ft_strjoin.c \
-				ft_strtrim.c ft_split.c ft_itoa.c ft_strmapi.c ft_striteri.c \
-				ft_putchar_fd.c ft_putstr_fd.c ft_putendl_fd.c ft_putnbr_fd.c \
-				ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
-				ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c \
-				ft_lstmap.c ft_printf.c ft_printf_functions_1.c ft_printf_functions_2.c
-LIB_SRCDIR	=	lib/libft/src
-LIB_PATH	=	$(addprefix $(LIB_SRCDIR)/, $(LIBFT_SRCS))
-LIB_OBJDIR	=	lib/libft/obj
-LIB_OBJS	=	$(patsubst $(LIB_SRCDIR)/%, $(LIB_OBJDIR)/%, $(LIB_PATH:.c=.o))
-
-PRIM_SRCS	=	main.c pipex.c ft_exec.c ft_filemanage.c
+PRIM_SRCS	=	main.c ft_pipex.c ft_exec.c ft_initialize.c ft_managerr.c \
+				ft_freeclose.c ft_heredoc.c
 PRIM_SRCDIR	=	prim/src
 PRIM_PATH	=	$(addprefix $(PRIM_SRCDIR)/, $(PRIM_SRCS))
 PRIM_OBJDIR	=	prim/obj
@@ -37,49 +23,57 @@ DEP_DIR		=	prim/dep
 PRIM_DEP	=	$(patsubst $(PRIM_OBJDIR)/%.o, $(DEP_DIR)/%.d, $(PRIM_OBJS))
 
 HEADER_SRCS	=	pipex.h
-HEADER_DIR	=	includes
+HEADER_DIR	=	prim/inc
 HEADER_PATH	=	$(addprefix $(HEADER_DIR)/, $(HEADER_SRCS))
 
-INCL_DIR	=	includes
+INCL_DIR	=	inc
 NAME		=	pipex
-LIB_NAME	=	libft.a
+LIB1_DIR	=	prim/lib/libft
+LIB2_DIR	=	prim/lib/gnl
+LIB1_NAME	=	libft.a
+LIB2_NAME	=	libgnl.a
+HDLIB1_DIR	=	$(LIB1_DIR)/inc
+HDLIB2_DIR	=	$(LIB2_DIR)/inc
 CC			=	cc
 AR			=	ar rc
 RM			=	rm -rvf
 MK			=	mkdir -p
-#DEBUG.....=	-g3 -fsanitize=address
+#DEBUG		=	-g3 -fsanitize=address
 CFLAGS		=	-Wall -Wextra -Werror
 DFLAGS		=	-MMD -MF
-#COPTIONS	=	-lXext -lX11 -lm
-#CLIBS		=	-Ilib/mlx -Llib/mlx -lmlx_Linux
 
 #################################
 
 all:		$(NAME)
 
-$(NAME):	$(PRIM_OBJS) | Makefile
-#				$(CC) $^ $(CLIBS) -o $@ $(COPTIONS)
-				$(CC) $^ -L. -lft -o $@
+$(NAME):	$(PRIM_OBJS) | $(LIB1_NAME) Makefile $(LIB2_NAME) Makefile
+				$(CC) $(CFLAGS) $(DEBUG) $^ -I$(HEADER_DIR) -I$(HDLIB1_DIR) -I$(HDLIB2_DIR) -L$(LIB1_DIR) -lft -L$(LIB2_DIR) -lgnl -o $@
 
-$(LIB_NAME):	${LIB_OBJS}
-				${AR} ${LIB_NAME} ${LIB_OBJS}
+$(LIB1_NAME):
+				$(MAKE) -C $(LIB1_DIR) all
 
-$(LIB_OBJDIR)/%.o:	$(LIB_SRCDIR)/%.c| $(LIB_OBJDIR)
-					${CC} ${CFLAGS} -c $< -o $@
+$(LIB2_NAME):
+				$(MAKE) -C $(LIB2_DIR) all
+
+#$(LIB_OBJDIR)/%.o:	$(LIB_SRCDIR)/%.c | $(LIB_OBJDIR)
+#					$(CC) $(CFLAGS) $(DEBUG)-c $< -o $@
 
 -include $(PRIM_DEP)
-$(PRIM_OBJDIR)/%.o:		$(PRIM_SRCDIR)/%.c | $(LIB_NAME) $(PRIM_OBJDIR) $(DEP_DIR) $(HEADER_PATH)
-							$(CC) $(CFLAGS) $(DEBUG) $(DFLAGS) $(DEP_DIR)/$*.d -c $< -o $@
+$(PRIM_OBJDIR)/%.o:		$(PRIM_SRCDIR)/%.c | $(LIB1_NAME) $(LIB2_NAME) $(PRIM_OBJDIR) $(DEP_DIR) $(HEADER_PATH)
+							$(CC) $(CFLAGS) $(DEBUG) $(DFLAGS) $(DEP_DIR)/$*.d -I$(HEADER_DIR) -I$(HDLIB1_DIR) -I$(HDLIB2_DIR) -c $< -o $@
 
-$(PRIM_OBJDIR) $(DEP_DIR) $(LIB_OBJDIR):		;
+$(PRIM_OBJDIR) $(DEP_DIR):		;
 				@$(MK) $@
 
 clean:		;
-				@$(RM) $(PRIM_OBJDIR) $(DEP_DIR) $(LIB_OBJDIR)
+				@$(RM) $(PRIM_OBJDIR) $(DEP_DIR)
 
 fclean:		clean
-				@$(RM) $(NAME) $(LIB_NAME)
+#				@$(RM) $(NAME) $(LIB1_NAME) $(LIB2_NAME)
+				@$(RM) $(NAME)
+				$(MAKE) -C $(LIB1_DIR) fclean
+				$(MAKE) -C $(LIB2_DIR) fclean
 
 re:			fclean all
 
-B_NAME.PHONY:		all clean fclean re
+.PHONY:		all clean fclean re

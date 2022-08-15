@@ -56,7 +56,7 @@ Executing commands
 example of Ping program
 exec commands override the whole, the memory is replaced, the execution lines, everything
 the way not to lose the current process is to create a new process with fork
-we have to chose the child process to execute the exec commands, otheerwise the parent process is replaced
+we have to chose the child process to execute the exec commands, otherwise the parent process is replaced
 
 Exit status
 int wstatus;

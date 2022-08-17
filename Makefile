@@ -6,14 +6,14 @@
 #    By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 18:34:29 by mbourgeo          #+#    #+#              #
-#    Updated: 2022/08/15 18:10:58 by mbourgeo         ###   ########.fr        #
+#    Updated: 2022/08/17 04:59:58 by mbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT_GOAL	= all
 
 PRIM_SRCS	=	main.c ft_pipex.c ft_exec.c ft_initialize.c ft_managerr.c \
-				ft_freeclose.c ft_heredoc.c
+				ft_redirect.c ft_freeclose.c ft_heredoc.c
 PRIM_SRCDIR	=	prim/src
 PRIM_PATH	=	$(addprefix $(PRIM_SRCDIR)/, $(PRIM_SRCS))
 PRIM_OBJDIR	=	prim/obj
@@ -39,12 +39,15 @@ AR			=	ar rc
 RM			=	rm -rvf
 MK			=	mkdir -p
 #DEBUG		=	-g3 -fsanitize=address
+DEBUG		=	-fsanitize=address
 CFLAGS		=	-Wall -Wextra -Werror
 DFLAGS		=	-MMD -MF
 
 #################################
 
 all:		$(NAME)
+
+bonus:			$(NAME)
 
 $(NAME):	$(PRIM_OBJS) | $(LIB1_NAME) Makefile $(LIB2_NAME) Makefile
 				$(CC) $(CFLAGS) $(DEBUG) $^ -I$(HEADER_DIR) -I$(HDLIB1_DIR) -I$(HDLIB2_DIR) -L$(LIB1_DIR) -lft -L$(LIB2_DIR) -lgnl -o $@
@@ -54,9 +57,6 @@ $(LIB1_NAME):
 
 $(LIB2_NAME):
 				$(MAKE) -C $(LIB2_DIR) all
-
-#$(LIB_OBJDIR)/%.o:	$(LIB_SRCDIR)/%.c | $(LIB_OBJDIR)
-#					$(CC) $(CFLAGS) $(DEBUG)-c $< -o $@
 
 -include $(PRIM_DEP)
 $(PRIM_OBJDIR)/%.o:		$(PRIM_SRCDIR)/%.c | $(LIB1_NAME) $(LIB2_NAME) $(PRIM_OBJDIR) $(DEP_DIR) $(HEADER_PATH)

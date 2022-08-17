@@ -6,46 +6,29 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/20 16:35:52 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/15 21:57:10 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/17 04:49:39 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-char	*ft_findpathstr(char **envp)
+char	*ft_findcmdpath(t_data *ppx, char *cmd)
 {
-	while (*envp)
-	{
-		if (!ft_strncmp("PATH", *envp, 4))
-			return (*envp + 5);
-		envp++;
-	}
-	return (NULL);
-}
-
-char	*ft_findcmdpath(char *cmd, char *path_str)
-{
-	char	**path_spt;
 	char	*cmd_str;
 	char	*temp;
+	int		i;
 
-	//dprintf(2, "lets see path \n");
-	path_spt = ft_split(path_str, ':');
-	if (!path_spt)
-		return (NULL);
-	//ft_printf("here\n");
-	while (*path_spt)
+	i = 0;
+	while (ppx->path_spt[i])
 	{
-		temp = ft_strjoin(*path_spt, "/");
+		temp = ft_strjoin(ppx->path_spt[i], "/");
 		cmd_str = ft_strjoin(temp, cmd);
 		free(temp);
 		if (!access(cmd_str, 0))
-		{
-			//dprintf(2, "found : %s\n", cmd_str);
-			//free(path_spt);
 			return (cmd_str);
-		}
-		path_spt++;
+		else
+			free(cmd_str);
+		i++;
 	}
 	return (NULL);
 }
@@ -54,21 +37,25 @@ int	ft_execve(t_data *ppx, char *cmd_str, char **envp)
 {
 	char	**cmd_spt;
 
-	//dprintf(2, "Voici la commande: %s\n", cmd_str);
 	cmd_spt = ft_split(cmd_str, ' ');
-	//dprintf(2, "Voici la commande: %s\n", cmd_spt[0]);
 	if (!cmd_spt)
 		return (ft_printerr(ERR_CMDSPLIT));
 	else
 	{
-		ppx->cmd_path = ft_findcmdpath(cmd_spt[0], ppx->path_env);
+		execve(cmd_spt[0], cmd_spt, envp);
+		ppx->cmd_path = ft_findcmdpath(ppx, cmd_spt[0]);
 		if (!ppx->cmd_path)
 		{
-			//dprintf(2, "chtite ereur \n");
-			free(cmd_spt);
-			return (ft_printerr(ERR_CMDPATH));
+			ft_printcomperr(ERR_CMDPATH, cmd_spt[0]);
+			ft_freemallocchartrunc(cmd_spt, -1);
+			return (1);
 		}
-		execve(ppx->cmd_path, cmd_spt, envp);
+		else if (execve(ppx->cmd_path, cmd_spt, envp) == -1)
+		{
+			ft_freemallocchartrunc(cmd_spt, -1);
+			free(ppx->cmd_path);
+			return (ft_printerr(ERR_EXECVE));
+		}
 	}
 	return (0);
 }

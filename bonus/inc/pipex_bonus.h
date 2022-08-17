@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 05:28:25 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/17 16:56:25 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/17 16:52:25 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include <unistd.h>
 # include <stdlib.h>
@@ -21,7 +21,7 @@
 # include "libft.h"
 # include "get_next_line.h"
 
-# define ERR_ARGS "Error : exactly 4 arguments must be specified\n"
+# define ERR_ARGS "Error : Too few arguments\n"
 # define ERR_FILEHEREDOC "Error with heredoc\n"
 # define ERR_PATHENV "Error : Env Path not found\n"
 # define ERR_PATHSPLIT "Error while splitting environment path\n"
@@ -42,6 +42,7 @@ typedef struct s_data
 {
 	int		fd_infile;
 	int		fd_outfile;
+	int		hdoc;
 	int		**fd;
 	int		*pid;
 	char	*path_env;
@@ -90,5 +91,8 @@ int		ft_fdchildredirect(t_data *ppx, int i);
 // ft_exec.c
 char	*ft_findcmdpath(t_data *ppx, char *cmd);
 int		ft_execve(t_data *ppx, char *cmd_str, char **envp);
+
+// ft_heredoc.c
+int		ft_heredoc(char *argv);
 
 #endif

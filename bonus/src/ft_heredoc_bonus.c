@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_heredoc.c                                       :+:      :+:    :+:   */
+/*   ft_heredoc_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 02:55:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/17 00:49:54 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/17 16:38:20 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 int	ft_heredoc(char *argv)
 {
 	int		fd_tempfile;
 	char	*str_gnl;
 
-	fd_tempfile = open("heredoc_file", O_RDWR | O_CREAT | O_TRUNC, 0777);
+	fd_tempfile = open(".heredoc_tmp", O_WRONLY | O_CREAT | O_TRUNC, 0664);
 	if (fd_tempfile < 0)
 		ft_printerr(ERR_FILEHEREDOC);
 	while (1)

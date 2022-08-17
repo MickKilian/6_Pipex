@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pipex.c                                         :+:      :+:    :+:   */
+/*   ft_pipex_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 05:25:42 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/17 16:57:08 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/17 16:16:04 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 int	ft_pipex(t_data *ppx, char **argv, char **envp)
 {
@@ -53,7 +53,7 @@ int	ft_makechildrenproc(t_data *ppx, char **argv, char **envp)
 			if (ft_fdchildredirect(ppx, i))
 				return (1);
 			ft_closeallfd(ppx);
-			if (ft_execve(ppx, argv[i + 2], envp))
+			if (ft_execve(ppx, argv[i + 2 + ppx->hdoc], envp))
 				return (1);
 		}
 	}

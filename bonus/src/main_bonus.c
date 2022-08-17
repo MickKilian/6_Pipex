@@ -1,23 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 05:20:04 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/17 16:49:46 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/17 16:20:53 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	ppx;
 
 	ft_bzero(&ppx, sizeof(t_data));
-	if (argc != 5)
+	ppx.hdoc = 0;
+	if (!ft_strncmp(argv[1], "here_doc", 9))
+		ppx.hdoc = 1;
+	if (argc < 5 + ppx.hdoc)
 		return (ft_printerr(ERR_ARGS));
 	else
 	{

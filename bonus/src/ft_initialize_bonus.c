@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_initialize.c                                    :+:      :+:    :+:   */
+/*   ft_initialize_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/14 18:35:18 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/17 16:57:34 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/17 16:47:43 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "pipex_bonus.h"
 
 int	ft_initpath(t_data *ppx, int argc, char **envp)
 {
 	int	i;
 
 	i = -1;
-	ppx->nb_proc = argc - 3;
+	ppx->nb_proc = argc - 3 - ppx->hdoc;
 	ppx->nb_pipes = ppx->nb_proc - 1;
 	ppx->path_env = ft_strdup(ft_findpathstr(envp));
 	if (!ppx->path_env)
@@ -34,7 +34,7 @@ int	ft_initprocpip(t_data *ppx, int argc, char **argv)
 	int	i;
 
 	i = -1;
-	if (ft_openinfile(ppx, argv[1])
+	if (ft_openinfile(ppx, argv[1 + ppx->hdoc])
 		|| ft_openoutfile(ppx, argv[argc - 1]))
 		return (1);
 	ppx->pid = malloc((ppx->nb_proc) * sizeof(int));
@@ -60,7 +60,21 @@ int	ft_initprocpip(t_data *ppx, int argc, char **argv)
 
 int	ft_openinfile(t_data *ppx, char *str)
 {
-	ppx->fd_infile = open(str, O_RDWR);
+	if (ppx->hdoc)
+	{
+		ft_heredoc(str);
+		ppx->fd_infile = open(".heredoc_tmp", O_RDONLY);
+		if (ppx->fd_infile < 0)
+		{
+			unlink(".heredoc_tmp");
+			ft_printerr(ERR_FILEHEREDOC);
+			return (1);
+		}
+	}
+	else
+	{
+		ppx->fd_infile = open(str, O_RDONLY);
+	}
 	if (ppx->fd_infile < 0)
 	{
 		perror(str);
@@ -71,7 +85,10 @@ int	ft_openinfile(t_data *ppx, char *str)
 
 int	ft_openoutfile(t_data *ppx, char *file)
 {
-	ppx->fd_outfile = open(file, O_RDWR | O_CREAT | O_TRUNC, 0664);
+	if (ppx->hdoc)
+		ppx->fd_outfile = open(file, O_WRONLY | O_CREAT | O_APPEND, 0664);
+	else
+		ppx->fd_outfile = open(file, O_RDWR | O_CREAT | O_TRUNC, 0664);
 	if (ppx->fd_outfile < 0)
 	{
 		ft_printerr(ERR_FILE);

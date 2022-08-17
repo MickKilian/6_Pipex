@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 05:20:04 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/17 16:20:53 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/17 22:56:16 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,19 @@ int	main(int argc, char **argv, char **envp)
 		ppx.hdoc = 1;
 	if (argc < 5 + ppx.hdoc)
 		return (ft_printerr(ERR_ARGS));
-	else
+	else if (ft_initpath(&ppx, argc, envp)
+		|| ft_initprocpip(&ppx, argc, argv))
 	{
-		if (ft_initpath(&ppx, argc, envp)
-			|| ft_initprocpip(&ppx, argc, argv))
-		{
+		if (ppx.path_env)
 			ft_freemallocchartrunc(ppx.path_spt, -1);
-			ft_printerr(ERR_INIT);
-			return (1);
-		}
-		if (ft_pipex(&ppx, argv, envp))
-		{
-			ft_freeall(&ppx, -1);
-			return (1);
-		}
-		ft_freeall(&ppx, -1);
+		ft_printerr(ERR_INIT);
+		return (1);
 	}
+	else if (ft_pipex(&ppx, argv, envp))
+	{
+		ft_freeall(&ppx, -1);
+		return (1);
+	}
+	ft_freeall(&ppx, -1);
 	return (0);
 }

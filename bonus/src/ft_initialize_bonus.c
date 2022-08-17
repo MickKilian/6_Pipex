@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/14 18:35:18 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/17 16:47:43 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/17 22:30:30 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,22 @@ int	ft_initpath(t_data *ppx, int argc, char **envp)
 	i = -1;
 	ppx->nb_proc = argc - 3 - ppx->hdoc;
 	ppx->nb_pipes = ppx->nb_proc - 1;
-	ppx->path_env = ft_strdup(ft_findpathstr(envp));
-	if (!ppx->path_env)
-		return (ft_printerr(ERR_PATHENV));
-	ppx->path_spt = ft_split(ppx->path_env, ':');
-	free(ppx->path_env);
-	if (!ppx->path_spt)
-		return (ft_printerr(ERR_PATHSPLIT));
+	if (!*envp)
+		ft_printerr(ERR_ENV);
+	else
+	{
+		if (ft_findpathstr(envp))
+			ppx->path_env = ft_strdup(ft_findpathstr(envp));
+		else
+		{
+			ft_printerr(ERR_PATHENV);
+			return (0);
+		}
+		ppx->path_spt = ft_split(ppx->path_env, ':');
+		free(ppx->path_env);
+		if (!ppx->path_spt)
+			return (ft_printerr(ERR_PATHSPLIT));
+	}
 	return (0);
 }
 

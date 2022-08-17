@@ -6,7 +6,7 @@
 #    By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 18:34:29 by mbourgeo          #+#    #+#              #
-#    Updated: 2022/08/17 16:58:40 by mbourgeo         ###   ########.fr        #
+#    Updated: 2022/08/17 23:12:06 by mbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ BN_HD_DIR	=	bonus/inc
 BN_HD_PATH	=	$(addprefix $(BN_HD_DIR)/, $(BN_HD_SRCS))
 
 NAME		=	pipex
+NAME_BONUS	=	pipex_bonus
 LIB1_DIR	=	prim/lib/libft
 LIB2_DIR	=	prim/lib/gnl
 LIB1_NAME	=	libft.a
@@ -62,7 +63,7 @@ $(NAME):	$(PRIM_OBJS) | $(LIB1_NAME) Makefile $(LIB2_NAME) Makefile
 				$(CC) $(CFLAGS) $(DEBUG) $^ -I$(HEADER_DIR) -I$(HDLIB1_DIR) -I$(HDLIB2_DIR) -L$(LIB1_DIR) -lft -L$(LIB2_DIR) -lgnl -o $@
 
 bonus:		$(BONUS_OBJS) | $(LIB1_NAME) Makefile $(LIB2_NAME) Makefile
-				$(CC) $(CFLAGS) $(DEBUG) $^ -I$(BN_HD_DIR) -I$(HDLIB1_DIR) -I$(HDLIB2_DIR) -L$(LIB1_DIR) -lft -L$(LIB2_DIR) -lgnl -o $(NAME)
+				$(CC) $(CFLAGS) $(DEBUG) $^ -I$(BN_HD_DIR) -I$(HDLIB1_DIR) -I$(HDLIB2_DIR) -L$(LIB1_DIR) -lft -L$(LIB2_DIR) -lgnl -o $(NAME_BONUS)
 
 $(LIB1_NAME):
 				$(MAKE) -C $(LIB1_DIR) all
@@ -89,6 +90,7 @@ clean:		;
 
 fclean:		clean
 				@$(RM) $(NAME)
+				@$(RM) $(NAME_BONUS)
 				$(MAKE) -C $(LIB1_DIR) fclean
 				$(MAKE) -C $(LIB2_DIR) fclean
 

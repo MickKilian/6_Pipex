@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/20 16:35:52 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/17 04:49:39 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/17 22:31:55 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*ft_findcmdpath(t_data *ppx, char *cmd)
 		temp = ft_strjoin(ppx->path_spt[i], "/");
 		cmd_str = ft_strjoin(temp, cmd);
 		free(temp);
-		if (!access(cmd_str, 0))
+		if (!access(cmd_str, F_OK | R_OK | X_OK))
 			return (cmd_str);
 		else
 			free(cmd_str);
@@ -43,6 +43,8 @@ int	ft_execve(t_data *ppx, char *cmd_str, char **envp)
 	else
 	{
 		execve(cmd_spt[0], cmd_spt, envp);
+		if (!ppx->path_env)
+			return (ft_printcomperr(ERR_CMDPATH, cmd_spt[0]));
 		ppx->cmd_path = ft_findcmdpath(ppx, cmd_spt[0]);
 		if (!ppx->cmd_path)
 		{

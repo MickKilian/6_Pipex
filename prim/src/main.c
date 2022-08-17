@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 05:20:04 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/17 16:49:46 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/17 21:58:52 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ int	main(int argc, char **argv, char **envp)
 		if (ft_initpath(&ppx, argc, envp)
 			|| ft_initprocpip(&ppx, argc, argv))
 		{
-			ft_freemallocchartrunc(ppx.path_spt, -1);
+			if (ppx.path_env)
+				ft_freemallocchartrunc(ppx.path_spt, -1);
 			ft_printerr(ERR_INIT);
 			return (1);
 		}

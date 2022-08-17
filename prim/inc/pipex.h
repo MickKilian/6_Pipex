@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 05:28:25 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/17 16:56:25 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/17 23:09:15 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@
 
 # define ERR_ARGS "Error : exactly 4 arguments must be specified\n"
 # define ERR_FILEHEREDOC "Error with heredoc\n"
-# define ERR_PATHENV "Error : Env Path not found\n"
+# define ERR_ENV "Comment : Environment empty\n"
+# define ERR_PATHENV "Comment : Env PATH not found\n"
 # define ERR_PATHSPLIT "Error while splitting environment path\n"
 # define ERR_REDIR "Redirection Error\n"
 # define ERR_FILE "File Error\n"
@@ -50,11 +51,6 @@ typedef struct s_data
 	int		nb_pipes;
 	int		nb_proc;
 }	t_data;
-
-enum
-{
-	TOOFEW
-};
 
 // main.c
 int		main(int argc, char **argv, char **envp);

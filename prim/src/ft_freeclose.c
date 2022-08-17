@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/14 20:17:04 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/17 02:09:30 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/17 21:58:35 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,6 @@ void	ft_freepidfdtrunc(t_data *ppx, int trunc)
 void	ft_freeall(t_data *ppx, int trunc)
 {
 	ft_freepidfdtrunc(ppx, trunc);
-	ft_freemallocchartrunc(ppx->path_spt, -1);
+	if (ppx->path_spt)
+		ft_freemallocchartrunc(ppx->path_spt, -1);
 }

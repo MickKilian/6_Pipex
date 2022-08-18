@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/20 16:35:52 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/17 22:31:55 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/18 02:07:20 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	ft_execve(t_data *ppx, char *cmd_str, char **envp)
 	{
 		execve(cmd_spt[0], cmd_spt, envp);
 		if (!ppx->path_env)
-			return (ft_printcomperr(ERR_CMDPATH, cmd_spt[0]));
+			return (ft_printcomperr(ERR_FILEPATH, cmd_spt[0]));
 		ppx->cmd_path = ft_findcmdpath(ppx, cmd_spt[0]);
 		if (!ppx->cmd_path)
 		{

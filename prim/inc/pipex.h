@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 05:28:25 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/08/17 23:38:33 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/08/18 02:07:47 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 # define ERR_CHILDREN "---> Child process failed\n"
 # define ERR_CMDSPLIT "Error while splitting command instruction\n"
 # define ERR_CMDPATH "Command not found : "
+# define ERR_FILEPATH "No such file or directory : "
 # define ERR_EXECVE "Error : Could not find program to execute\n"
 # define ERR_EXEC "---> Command execution failed\n"
 # define OFFSET "   "
